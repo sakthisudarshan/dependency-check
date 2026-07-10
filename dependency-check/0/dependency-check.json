@@ -1,0 +1,79 @@
+{
+  "exit": 0,
+  "scan_ok": true,
+  "report_path": "tests/fixtures/dependency-check_clean.json",
+  "total_components": 3,
+  "total_vulnerabilities": 0,
+  "distinct_cves": 0,
+  "gate_name": "OWASP Dependency-Check SCA Gate",
+  "tool": "dependency-check",
+  "execution_status": "COMPLETED",
+  "all_gates_passed": true,
+  "scoring_policy": "Excel normalisation formulas from Dependency-Check JSON report",
+  "metrics": [
+    {
+      "classification": "Hidden Relationship Mapping",
+      "value": 100.0,
+      "execution_status": "COMPLETED",
+      "result": "PASS",
+      "coverage": 100.0
+    },
+    {
+      "classification": "Legal Risk Validation",
+      "value": 100.0,
+      "execution_status": "COMPLETED",
+      "result": "PASS",
+      "coverage": 100.0
+    },
+    {
+      "classification": "Trust Integrity Verification",
+      "value": 100.0,
+      "execution_status": "COMPLETED",
+      "result": "PASS",
+      "coverage": 100.0
+    },
+    {
+      "classification": "Community Vitality Tracking",
+      "value": 100.0,
+      "execution_status": "COMPLETED",
+      "result": "PASS",
+      "coverage": 100.0
+    },
+    {
+      "classification": "Mitigation Effort Ranking",
+      "value": 100.0,
+      "execution_status": "COMPLETED",
+      "result": "PASS",
+      "coverage": 100.0
+    },
+    {
+      "classification": "Real-Time Alerting",
+      "value": 100.0,
+      "execution_status": "COMPLETED",
+      "result": "PASS",
+      "coverage": 100.0
+    },
+    {
+      "classification": "Known CVE Count",
+      "value": 100.0,
+      "execution_status": "COMPLETED",
+      "result": "PASS",
+      "coverage": 100.0
+    },
+    {
+      "classification": "Version Lag Assessment",
+      "value": 100.0,
+      "execution_status": "COMPLETED",
+      "result": "PASS",
+      "coverage": 100.0
+    }
+  ],
+  "HiddenRelationshipMapping": 100.0,
+  "LegalRiskValidation": 100.0,
+  "TrustIntegrityVerification": 100.0,
+  "CommunityVitalityTracking": 100.0,
+  "MitigationEffortRanking": 100.0,
+  "RealTimeAlerting": 100.0,
+  "KnownCVECount": 100.0,
+  "VersionLagAssessment": 100.0
+}

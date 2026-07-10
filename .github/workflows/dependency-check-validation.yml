@@ -1,0 +1,47 @@
+name: Dependency-Check SCA Validation
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install test dependencies
+        run: pip install pytest
+
+      - name: Maven test + Dependency-Check scan
+        run: |
+          chmod +x mvnw
+          ./mvnw -q clean test
+          ./mvnw -q versions:display-dependency-updates \
+            -DoutputFile=target/dependency-updates.txt \
+            -DprocessDependencyManagement=false
+          ./mvnw -q dependency-check:check -Dformats=JSON,HTML
+        env:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+
+      - name: Export TESTABLE platform JSON
+        run: python scripts/export_testable_dependency_check.py
+
+      - name: Validate metrics gate
+        run: python scripts/validate_metrics_gate.py --require-100
+
+      - name: Run unit tests
+        run: pytest -q

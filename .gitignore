@@ -1,0 +1,13 @@
+# TESTABLE Dependency-Check validation repo
+
+target/
+reports/
+.pytest_cache/
+__pycache__/
+*.pyc
+dependency-check/0/*
+!dependency-check/0/dependency-check.json
+*.class
+.idea/
+.vscode/
+*.iml
