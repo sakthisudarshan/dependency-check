@@ -4,10 +4,14 @@ on:
   push:
     branches: [main, master]
   pull_request:
+    branches: [main, master]
+  workflow_dispatch:
 
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
+
     steps:
       - uses: actions/checkout@v4
 
@@ -26,22 +30,48 @@ jobs:
       - name: Install test dependencies
         run: pip install pytest
 
+      - name: Run pytest baseline
+        run: pytest -q
+
       - name: Maven test + Dependency-Check scan
         run: |
           chmod +x mvnw
-          ./mvnw -q clean test
-          ./mvnw -q versions:display-dependency-updates \
+          ./mvnw -B clean test
+          ./mvnw -B versions:display-dependency-updates \
             -DoutputFile=target/dependency-updates.txt \
             -DprocessDependencyManagement=false
-          ./mvnw -q dependency-check:check -Dformats=JSON,HTML
+          ./mvnw -B dependency-check:check -Dformats=JSON,HTML
         env:
           NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
 
       - name: Export TESTABLE platform JSON
-        run: python scripts/export_testable_dependency_check.py
+        run: python scripts/export_testable_dependency_check.py --fail-on-gate
 
       - name: Validate metrics gate
         run: python scripts/validate_metrics_gate.py --require-100
 
-      - name: Run unit tests
-        run: pytest -q
+      - name: Verify platform JSON exists
+        run: test -f dependency_check/0/dependency_check.json
+
+      - name: Upload platform JSON to S3
+        if: env.TESTABLE_METRICS_BUCKET != ''
+        env:
+          TESTABLE_METRICS_BUCKET: ${{ secrets.TESTABLE_METRICS_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+        run: |
+          aws s3 cp dependency_check/0/dependency_check.json \
+            s3://${TESTABLE_METRICS_BUCKET}/dependency_check/0/dependency_check.json \
+            --content-type application/json
+
+      - name: Upload metrics artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-metrics-report
+          path: |
+            reports/
+            dependency_check/0/dependency_check.json
+            target/dependency-check/dependency-check-report.json
+          retention-days: 30

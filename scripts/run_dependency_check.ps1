@@ -29,6 +29,12 @@ Write-Host "==> Export TESTABLE platform JSON"
 python scripts/export_testable_dependency_check.py
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
+if ($env:TESTABLE_METRICS_BUCKET) {
+    Write-Host "==> Upload platform JSON to S3"
+    .\scripts\upload_platform_to_s3.ps1
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+}
+
 Write-Host "==> Validate 100/100 metrics gate"
 python scripts/validate_metrics_gate.py --require-100
 exit $LASTEXITCODE

@@ -14,7 +14,7 @@ from scripts.metrics_reporter import compute_metrics, build_testable_gate_report
 report = compute_metrics(Path('tests/fixtures/dependency-check_clean.json'))
 gate = build_testable_gate_report(report)
 platform = build_platform_dependency_check_json(report, gate, report_path='tests/fixtures/dependency-check_clean.json')
-out = Path('dependency-check/0/dependency-check.json')
+out = Path('dependency_check/0/dependency_check.json')
 out.parent.mkdir(parents=True, exist_ok=True)
 out.write_text(json.dumps(platform, indent=2), encoding='utf-8')
 print('Wrote', out)

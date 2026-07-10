@@ -2,78 +2,92 @@
   "exit": 0,
   "scan_ok": true,
   "report_path": "tests/fixtures/dependency-check_clean.json",
+  "platform_file": "dependency_check/0/dependency_check.json",
   "total_components": 3,
   "total_vulnerabilities": 0,
   "distinct_cves": 0,
+  "totalComponents": 3,
+  "totalVulnerabilities": 0,
+  "distinctCves": 0,
+  "overall_score": 100,
   "gate_name": "OWASP Dependency-Check SCA Gate",
-  "tool": "dependency-check",
+  "tool": "dependency_check",
   "execution_status": "COMPLETED",
   "all_gates_passed": true,
   "scoring_policy": "Excel normalisation formulas from Dependency-Check JSON report",
+  "scoringPolicy": "Excel normalisation formulas from Dependency-Check JSON report",
+  "HiddenRelationshipMapping": 100,
+  "hidden_relationship_mapping": 100,
+  "LegalRiskValidation": 100,
+  "legal_risk_validation": 100,
+  "TrustIntegrityVerification": 100,
+  "trust_integrity_verification": 100,
+  "CommunityVitalityTracking": 100,
+  "community_vitality_tracking": 100,
+  "MitigationEffortRanking": 100,
+  "mitigation_effort_ranking": 100,
+  "RealTimeAlerting": 100,
+  "real_time_alerting": 100,
+  "KnownCVECount": 100,
+  "known_cve_count": 100,
+  "VersionLagAssessment": 100,
+  "version_lag_assessment": 100,
   "metrics": [
     {
       "classification": "Hidden Relationship Mapping",
-      "value": 100.0,
+      "value": 100,
       "execution_status": "COMPLETED",
       "result": "PASS",
-      "coverage": 100.0
+      "coverage": 100
     },
     {
       "classification": "Legal Risk Validation",
-      "value": 100.0,
+      "value": 100,
       "execution_status": "COMPLETED",
       "result": "PASS",
-      "coverage": 100.0
+      "coverage": 100
     },
     {
       "classification": "Trust Integrity Verification",
-      "value": 100.0,
+      "value": 100,
       "execution_status": "COMPLETED",
       "result": "PASS",
-      "coverage": 100.0
+      "coverage": 100
     },
     {
       "classification": "Community Vitality Tracking",
-      "value": 100.0,
+      "value": 100,
       "execution_status": "COMPLETED",
       "result": "PASS",
-      "coverage": 100.0
+      "coverage": 100
     },
     {
       "classification": "Mitigation Effort Ranking",
-      "value": 100.0,
+      "value": 100,
       "execution_status": "COMPLETED",
       "result": "PASS",
-      "coverage": 100.0
+      "coverage": 100
     },
     {
       "classification": "Real-Time Alerting",
-      "value": 100.0,
+      "value": 100,
       "execution_status": "COMPLETED",
       "result": "PASS",
-      "coverage": 100.0
+      "coverage": 100
     },
     {
       "classification": "Known CVE Count",
-      "value": 100.0,
+      "value": 100,
       "execution_status": "COMPLETED",
       "result": "PASS",
-      "coverage": 100.0
+      "coverage": 100
     },
     {
       "classification": "Version Lag Assessment",
-      "value": 100.0,
+      "value": 100,
       "execution_status": "COMPLETED",
       "result": "PASS",
-      "coverage": 100.0
+      "coverage": 100
     }
-  ],
-  "HiddenRelationshipMapping": 100.0,
-  "LegalRiskValidation": 100.0,
-  "TrustIntegrityVerification": 100.0,
-  "CommunityVitalityTracking": 100.0,
-  "MitigationEffortRanking": 100.0,
-  "RealTimeAlerting": 100.0,
-  "KnownCVECount": 100.0,
-  "VersionLagAssessment": 100.0
+  ]
 }

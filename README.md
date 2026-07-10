@@ -50,13 +50,17 @@ All under **White Box → Security White-box Testing → Dependency Risk (SCA)**
 .\mvnw.cmd dependency-check:check -Dformats=JSON,HTML
 python scripts/export_testable_dependency_check.py
 python scripts/validate_metrics_gate.py --require-100
+
+# Optional S3 upload (required for TESTABLE platform trigger)
+$env:TESTABLE_METRICS_BUCKET = "your-bucket"
+.\scripts\upload_platform_to_s3.ps1
 ```
 
 ## Output files
 
 | File | Purpose |
 |------|---------|
-| `dependency-check/0/dependency-check.json` | TESTABLE platform gate file |
+| `dependency_check/0/dependency_check.json` | TESTABLE platform gate file (S3 key) |
 | `target/dependency-check/dependency-check-report.json` | Raw Dependency-Check output |
 | `reports/metrics-report.json` | Full detail per metric + derivations |
 | `baseline/cve_snapshot.json` | CVE baseline for Real-Time Alerting delta |
@@ -71,4 +75,4 @@ python -m pytest -q
 
 ## Mapping reference
 
-See [docs/metrics-mapping.md](docs/metrics-mapping.md) for Excel formula → implementation mapping.
+See [docs/TESTING_TEAM_GUIDE.md](docs/TESTING_TEAM_GUIDE.md) for S3 path and platform integration details.

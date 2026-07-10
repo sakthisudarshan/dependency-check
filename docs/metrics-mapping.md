@@ -36,7 +36,7 @@ Metrics 5 and 6 gate at **100%** coverage/response rate.
 
 ## Platform JSON
 
-`dependency-check/0/dependency-check.json` includes:
+`dependency_check/0/dependency_check.json` includes:
 
 - `total_components`, `total_vulnerabilities`, `distinct_cves`
 - 8 platform score keys (0–100 scale)

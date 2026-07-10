@@ -5,8 +5,8 @@ reports/
 .pytest_cache/
 __pycache__/
 *.pyc
-dependency-check/0/*
-!dependency-check/0/dependency-check.json
+dependency_check/0/*
+!dependency_check/0/dependency_check.json
 *.class
 .idea/
 .vscode/

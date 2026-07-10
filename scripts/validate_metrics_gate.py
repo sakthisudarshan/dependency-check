@@ -97,8 +97,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--file",
-        default="dependency-check/0/dependency-check.json",
-        help="Path to TESTABLE platform dependency-check.json",
+        default="dependency_check/0/dependency_check.json",
+        help="Path to TESTABLE platform dependency_check.json",
     )
     parser.add_argument(
         "--require-100",

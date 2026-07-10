@@ -15,7 +15,9 @@ from pathlib import Path
 from typing import Any
 
 GATE_NAME = "OWASP Dependency-Check SCA Gate"
-TOOL = "dependency-check"
+TOOL = "dependency_check"
+PLATFORM_DIR = "dependency_check"
+PLATFORM_RELATIVE_PATH = "dependency_check/0/dependency_check.json"
 
 CLASSIFICATIONS: tuple[str, ...] = (
     "Hidden Relationship Mapping",
@@ -40,6 +42,17 @@ PLATFORM_SCORE_KEYS: tuple[str, ...] = (
 )
 
 CLASSIFICATION_TO_PLATFORM_KEY = dict(zip(CLASSIFICATIONS, PLATFORM_SCORE_KEYS))
+
+CLASSIFICATION_TO_SNAKE_KEY: dict[str, str] = {
+    "Hidden Relationship Mapping": "hidden_relationship_mapping",
+    "Legal Risk Validation": "legal_risk_validation",
+    "Trust Integrity Verification": "trust_integrity_verification",
+    "Community Vitality Tracking": "community_vitality_tracking",
+    "Mitigation Effort Ranking": "mitigation_effort_ranking",
+    "Real-Time Alerting": "real_time_alerting",
+    "Known CVE Count": "known_cve_count",
+    "Version Lag Assessment": "version_lag_assessment",
+}
 
 COPYLEFT_PATTERNS = re.compile(
     r"\b(GPL|AGPL|LGPL|EUPL|CDDL|CPAL|OSL|SSPL|RPL)\b",
@@ -657,32 +670,52 @@ def build_platform_dependency_check_json(
     *,
     report_path: str,
 ) -> dict[str, Any]:
+    platform_scores = {
+        key: round(metric.normalised_score)
+        for metric in report.metrics
+        for key in (
+            CLASSIFICATION_TO_PLATFORM_KEY[metric.classification],
+            CLASSIFICATION_TO_SNAKE_KEY[metric.classification],
+        )
+    }
+    overall_score = min(platform_scores[k] for k in PLATFORM_SCORE_KEYS)
     platform: dict[str, Any] = {
-        "exit": 0,
+        "exit": 0 if gate_report["all_gates_passed"] else 1,
         "scan_ok": True,
         "report_path": report_path,
+        "platform_file": PLATFORM_RELATIVE_PATH,
         "total_components": report.total_components,
         "total_vulnerabilities": report.total_vulnerabilities,
         "distinct_cves": report.distinct_cves,
+        "totalComponents": report.total_components,
+        "totalVulnerabilities": report.total_vulnerabilities,
+        "distinctCves": report.distinct_cves,
+        "overall_score": overall_score,
         "gate_name": GATE_NAME,
         "tool": TOOL,
         "execution_status": "COMPLETED",
         "all_gates_passed": gate_report["all_gates_passed"],
         "scoring_policy": "Excel normalisation formulas from Dependency-Check JSON report",
+        "scoringPolicy": "Excel normalisation formulas from Dependency-Check JSON report",
+        **platform_scores,
         "metrics": [
             {
                 "classification": metric.classification,
-                "value": metric.normalised_score,
+                "value": round(metric.normalised_score),
                 "execution_status": "COMPLETED",
                 "result": metric.result,
-                "coverage": metric.normalised_score,
+                "coverage": round(metric.normalised_score),
             }
             for metric in report.metrics
         ],
     }
-    for classification, key in CLASSIFICATION_TO_PLATFORM_KEY.items():
-        metric = next(m for m in report.metrics if m.classification == classification)
-        platform[key] = metric.normalised_score
+    platform.update(
+        {
+            key: platform[key]
+            for key in PLATFORM_SCORE_KEYS
+            if key in platform
+        }
+    )
     return platform
 
 

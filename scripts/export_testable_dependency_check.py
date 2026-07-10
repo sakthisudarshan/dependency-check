@@ -2,7 +2,7 @@
 """Post-process OWASP Dependency-Check output for the TESTABLE platform.
 
 Run after `mvnw clean test dependency-check:check` in CI or locally.
-Writes dependency-check/0/dependency-check.json with all 8 SCA metrics.
+Writes dependency_check/0/dependency_check.json with all 8 SCA metrics.
 """
 
 from __future__ import annotations
@@ -17,6 +17,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.metrics_reporter import (  # noqa: E402
+    PLATFORM_RELATIVE_PATH,
     build_platform_dependency_check_json,
     build_testable_gate_report,
     compute_metrics,
@@ -40,8 +41,8 @@ def main() -> int:
     report_path = _find_report()
     version_updates_path = ROOT / "target" / "dependency-updates.txt"
     baseline_path = ROOT / "baseline" / "cve_snapshot.json"
-    out_dir = ROOT / "dependency-check" / "0"
-    platform_file = out_dir / "dependency-check.json"
+    out_dir = ROOT / "dependency_check" / "0"
+    platform_file = out_dir / "dependency_check.json"
     out_dir.mkdir(parents=True, exist_ok=True)
 
     if report_path is None:
@@ -75,7 +76,8 @@ def main() -> int:
                 "totalComponents": report.total_components,
                 "totalVulnerabilities": report.total_vulnerabilities,
                 "distinctCves": report.distinct_cves,
-                "overallScore": min(m.normalised_score for m in report.metrics),
+                "overallScore": platform_report["overall_score"],
+                "platformFile": PLATFORM_RELATIVE_PATH,
                 "metrics": [metric.__dict__ for metric in report.metrics],
             },
             indent=2,
@@ -101,6 +103,7 @@ def main() -> int:
     )
 
     print(f"Wrote platform gate: {platform_file}")
+    print(f"S3 target path: s3://<bucket>/{PLATFORM_RELATIVE_PATH}")
     print(f"Wrote detailed report: {reports_dir / 'metrics-report.json'}")
     print(f"Updated baseline CVE snapshot: {baseline_path}")
 
