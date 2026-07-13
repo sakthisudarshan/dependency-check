@@ -4,7 +4,9 @@ target/
 reports/
 .pytest_cache/
 __pycache__/
-*.pyc
+scripts/
+tests/
+/fixtures/
 dependency_check/0/*
 !dependency_check/0/dependency_check.json
 *.class

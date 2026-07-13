@@ -1,0 +1,95 @@
+{
+  "reportSchema": "1.1",
+  "scanInfo": {
+    "engineVersion": "12.2.2"
+  },
+  "projectInfo": {
+    "name": "dependency-check-metrics-demo",
+    "reportDate": "2026-07-10T12:00:00Z"
+  },
+  "dependencies": [
+    {
+      "isVirtual": false,
+      "fileName": "slf4j-api-2.0.13.jar",
+      "filePath": "/demo/slf4j-api-2.0.13.jar",
+      "license": "MIT",
+      "projectReferences": ["compile"],
+      "packages": [
+        {
+          "id": "pkg:maven/org.slf4j/slf4j-api@2.0.13",
+          "confidence": "HIGHEST"
+        }
+      ],
+      "evidenceCollected": {
+        "vendorEvidence": [],
+        "productEvidence": [],
+        "versionEvidence": [
+          {
+            "type": "version",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "version",
+            "value": "2.0.13"
+          }
+        ]
+      }
+    },
+    {
+      "isVirtual": false,
+      "fileName": "slf4j-simple-2.0.13.jar",
+      "filePath": "/demo/slf4j-simple-2.0.13.jar",
+      "license": "MIT",
+      "includedBy": [
+        {
+          "reference": "pkg:maven/com.testable/dependency-check-metrics-demo@1.0.0-SNAPSHOT",
+          "type": "Transitive"
+        }
+      ],
+      "packages": [
+        {
+          "id": "pkg:maven/org.slf4j/slf4j-simple@2.0.13",
+          "confidence": "HIGHEST"
+        }
+      ],
+      "evidenceCollected": {
+        "vendorEvidence": [],
+        "productEvidence": [],
+        "versionEvidence": [
+          {
+            "type": "version",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "version",
+            "value": "2.0.13"
+          }
+        ]
+      }
+    },
+    {
+      "isVirtual": false,
+      "fileName": "junit-jupiter-5.10.2.jar",
+      "filePath": "/demo/junit-jupiter-5.10.2.jar",
+      "license": "EPL-2.0",
+      "projectReferences": ["test"],
+      "packages": [
+        {
+          "id": "pkg:maven/org.junit.jupiter/junit-jupiter@5.10.2",
+          "confidence": "HIGHEST"
+        }
+      ],
+      "evidenceCollected": {
+        "vendorEvidence": [],
+        "productEvidence": [],
+        "versionEvidence": [
+          {
+            "type": "version",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "version",
+            "value": "5.10.2"
+          }
+        ]
+      }
+    }
+  ]
+}

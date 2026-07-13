@@ -1,59 +1,51 @@
-# TESTABLE OWASP Dependency-Check — Java SCA Metrics Validation Repo
+# TESTABLE OWASP Dependency-Check — 100% Java SCA Metrics Validation Repo
 
-Java **Software Composition Analysis (SCA)** metrics validation repository aligned with **Testable Strategy Metrics Mapping v0.2**. Uses **OWASP Dependency-Check** as the primary tool for all 8 **Dependency Risk (SCA)** metrics mapped to Java.
+Java **Software Composition Analysis (SCA)** metrics validation repository aligned with **Testable Strategy Metrics Mapping v0.2**. **100% Java** — all metric computation, export, validation, and S3 upload run through Maven and Java main classes.
 
-| Tool | Metrics | Data source |
-|------|---------|-------------|
-| **OWASP Dependency-Check** | 8 SCA | `target/dependency-check/dependency-check-report.json` |
-| **versions-maven-plugin** (supplementary) | Version Lag Assessment | `target/dependency-updates.txt` |
-
-**Maintained at 100/100** on all eight classifications when the demo project has zero known CVEs, permissive licenses, and current dependency versions.
+| Component | Language | Entry point |
+|-----------|----------|-------------|
+| Demo application | Java | `com.testable.demo.App` |
+| Metrics engine | Java | `com.testable.metrics.MetricsReporter` |
+| Platform export | Java | `com.testable.metrics.PlatformExporter` |
+| Gate validation | Java | `com.testable.metrics.ValidateGateMain` |
+| S3 upload | Java | `com.testable.metrics.S3PlatformUploader` |
+| Unit tests | Java (JUnit 5) | `com.testable.metrics.MetricsGateSchemaTest` |
 
 ## Quick validation (offline — no NVD download)
 
 ```powershell
 cd f:\Testable\java\dependency-check
-.\scripts\run_offline_validation.ps1
+.\mvnw.cmd test -Poffline-validation
 ```
 
 Expected: `METRICS GATE VALIDATION: PASS (100/100)`
 
-## Full scan validation (requires NVD data download)
+## Maven commands
+
+| Command | Purpose |
+|---------|---------|
+| `mvnw test` | Run all JUnit tests |
+| `mvnw test -Poffline-validation` | Offline export + 100/100 gate |
+| `mvnw exec:java@export-offline` | Export from clean fixture |
+| `mvnw exec:java@validate-gate` | Validate platform JSON |
+| `mvnw exec:java@export-platform` | Export after live Dependency-Check scan |
+| `mvnw exec:java@upload-s3` | Upload to S3 (needs `TESTABLE_METRICS_BUCKET`) |
+
+## Full scan pipeline
 
 ```powershell
-cd f:\Testable\java\dependency-check
-.\scripts\run_dependency_check.ps1
-```
-
-> **Note:** The first Dependency-Check run downloads NVD data (can take 10+ minutes). Set `NVD_API_KEY` to avoid rate limits. Subsequent runs are faster.
-
-## Metrics covered (8)
-
-All under **White Box → Security White-box Testing → Dependency Risk (SCA)**:
-
-| Classification | Technique | Metric |
-|----------------|-----------|--------|
-| Transitive Dependency Analysis | Hidden Relationship Mapping | Hidden Relationship Mapping |
-| License Compliance Testing | Legal Risk Validation | Legal Risk Validation |
-| Supply Chain Security Analysis | Trust Integrity Verification | Trust Integrity Verification |
-| Dependency Health Monitoring | Community Vitality Tracking | Community Vitality Tracking |
-| Risk Prioritization | Mitigation Effort Ranking | Mitigation Effort Ranking |
-| Continuous Dependency Monitoring | Real-Time Alerting | Real-Time Alerting |
-| Vulnerability Dependency Detection | Known CVE Count | Known CVE Count |
-| Outdated Dependency Detection | Version Lag Assessment | Version Lag Assessment |
-
-## Pipeline
-
-```powershell
+$env:NVD_API_KEY = "your-nvd-api-key"
 .\mvnw.cmd clean test
 .\mvnw.cmd versions:display-dependency-updates -DoutputFile=target/dependency-updates.txt
 .\mvnw.cmd dependency-check:check -Dformats=JSON,HTML
-python scripts/export_testable_dependency_check.py
-python scripts/validate_metrics_gate.py --require-100
+.\mvnw.cmd exec:java@export-platform
+.\mvnw.cmd exec:java@validate-gate
+```
 
-# Optional S3 upload (required for TESTABLE platform trigger)
-$env:TESTABLE_METRICS_BUCKET = "your-bucket"
-.\scripts\upload_platform_to_s3.ps1
+## S3 platform path
+
+```text
+dependency_check/0/dependency_check.json
 ```
 
 ## Output files
@@ -62,17 +54,10 @@ $env:TESTABLE_METRICS_BUCKET = "your-bucket"
 |------|---------|
 | `dependency_check/0/dependency_check.json` | TESTABLE platform gate file (S3 key) |
 | `target/dependency-check/dependency-check-report.json` | Raw Dependency-Check output |
-| `reports/metrics-report.json` | Full detail per metric + derivations |
-| `baseline/cve_snapshot.json` | CVE baseline for Real-Time Alerting delta |
+| `reports/metrics-report.json` | Full detail per metric |
 
-## Verify metrics without a full scan
+## Metrics covered (8)
 
-Use the clean fixture to validate metric logic offline:
+All under **White Box → Security White-box Testing → Dependency Risk (SCA)**.
 
-```powershell
-python -m pytest -q
-```
-
-## Mapping reference
-
-See [docs/TESTING_TEAM_GUIDE.md](docs/TESTING_TEAM_GUIDE.md) for S3 path and platform integration details.
+See [docs/TESTING_TEAM_GUIDE.md](docs/TESTING_TEAM_GUIDE.md) and [docs/metrics-mapping.md](docs/metrics-mapping.md).

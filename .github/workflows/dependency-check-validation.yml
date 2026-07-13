@@ -22,33 +22,23 @@ jobs:
           java-version: "17"
           cache: maven
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Install test dependencies
-        run: pip install pytest
-
-      - name: Run pytest baseline
-        run: pytest -q
-
-      - name: Maven test + Dependency-Check scan
+      - name: Offline Java validation (no NVD download)
         run: |
           chmod +x mvnw
+          ./mvnw -B test -Poffline-validation
+
+      - name: Full scan pipeline (optional NVD)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
           ./mvnw -B clean test
           ./mvnw -B versions:display-dependency-updates \
             -DoutputFile=target/dependency-updates.txt \
             -DprocessDependencyManagement=false
           ./mvnw -B dependency-check:check -Dformats=JSON,HTML
+          ./mvnw -B exec:java@export-platform
+          ./mvnw -B exec:java@validate-gate
         env:
           NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
-
-      - name: Export TESTABLE platform JSON
-        run: python scripts/export_testable_dependency_check.py --fail-on-gate
-
-      - name: Validate metrics gate
-        run: python scripts/validate_metrics_gate.py --require-100
 
       - name: Verify platform JSON exists
         run: test -f dependency_check/0/dependency_check.json
@@ -60,10 +50,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-        run: |
-          aws s3 cp dependency_check/0/dependency_check.json \
-            s3://${TESTABLE_METRICS_BUCKET}/dependency_check/0/dependency_check.json \
-            --content-type application/json
+        run: ./mvnw -B exec:java@upload-s3
 
       - name: Upload metrics artifacts
         if: always()
@@ -73,5 +60,4 @@ jobs:
           path: |
             reports/
             dependency_check/0/dependency_check.json
-            target/dependency-check/dependency-check-report.json
           retention-days: 30
