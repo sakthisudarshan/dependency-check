@@ -65,31 +65,31 @@ public final class GateValidator {
             return errors;
         }
 
-        for (String classification : MetricsConstants.CLASSIFICATIONS) {
-            JsonNode metric = findMetric(metrics, classification);
+        for (String technique : MetricsConstants.TECHNIQUES) {
+            JsonNode metric = findMetric(metrics, technique);
             if (metric == null) {
-                errors.add("missing classification in metrics[]: " + classification);
+                errors.add("missing technique in metrics[]: " + technique);
                 continue;
             }
             JsonNode value = metric.path("value");
             JsonNode coverage = metric.path("coverage");
             String result = metric.path("result").asText("");
             if (!"PASS".equals(result)) {
-                errors.add(classification + ": result must be PASS, got " + result);
+                errors.add(technique + ": result must be PASS, got " + result);
             }
             if (requirePerfect) {
                 if (!value.isNumber() || value.asDouble() < 100) {
-                    errors.add(classification + ": value=" + value + " below 100");
+                    errors.add(technique + ": value=" + value + " below 100");
                 }
                 if (!coverage.isNumber() || coverage.asDouble() < 100) {
-                    errors.add(classification + ": coverage=" + coverage + " below 100");
+                    errors.add(technique + ": coverage=" + coverage + " below 100");
                 }
             } else {
                 if (!value.isNumber()) {
-                    errors.add(classification + ": value must be numeric");
+                    errors.add(technique + ": value must be numeric");
                 }
                 if (!coverage.isNumber()) {
-                    errors.add(classification + ": coverage must be numeric");
+                    errors.add(technique + ": coverage must be numeric");
                 }
             }
         }

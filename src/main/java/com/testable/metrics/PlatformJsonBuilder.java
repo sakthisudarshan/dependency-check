@@ -45,11 +45,13 @@ public final class PlatformJsonBuilder {
     public static ObjectNode buildPlatformJson(ScanReport report, String reportPath) {
         Map<String, Integer> platformScores = new LinkedHashMap<>();
         for (MetricResult metric : report.metrics()) {
-            String camel = MetricsConstants.CLASSIFICATION_TO_PLATFORM_KEY.get(metric.classification());
-            String snake = MetricsConstants.snakeKey(metric.classification());
+            String camel = MetricsConstants.METRIC_TO_PLATFORM_KEY.get(metric.classification());
+            String metricSnake = MetricsConstants.metricSnakeKey(metric.classification());
+            String techniqueSnake = MetricsConstants.techniqueSnakeKey(metric.technique());
             int score = (int) Math.round(metric.normalisedScore());
             platformScores.put(camel, score);
-            platformScores.put(snake, score);
+            platformScores.put(metricSnake, score);
+            platformScores.put(techniqueSnake, score);
         }
 
         int overallScore = MetricsConstants.PLATFORM_SCORE_KEYS.stream()
@@ -84,7 +86,9 @@ public final class PlatformJsonBuilder {
         ArrayNode metrics = platform.putArray("metrics");
         for (MetricResult metric : report.metrics()) {
             ObjectNode entry = metrics.addObject();
-            entry.put("classification", metric.classification());
+            entry.put("classification", metric.technique());
+            entry.put("metric", metric.classification());
+            entry.put("technique", metric.technique());
             entry.put("value", (int) Math.round(metric.normalisedScore()));
             entry.put("execution_status", "COMPLETED");
             entry.put("result", metric.result());

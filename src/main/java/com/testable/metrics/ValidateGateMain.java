@@ -33,6 +33,6 @@ public final class ValidateGateMain {
         String mode = requirePerfect ? "100/100" : "Excel gate thresholds";
         System.out.println("METRICS GATE VALIDATION: PASS (" + mode + ")");
         System.out.println("  File: " + platformFile.toAbsolutePath());
-        System.out.println("  Classifications: " + MetricsConstants.CLASSIFICATIONS.size() + "/8 PASS");
+        System.out.println("  Classifications: " + MetricsConstants.TECHNIQUES.size() + "/8 PASS");
     }
 }

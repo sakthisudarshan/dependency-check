@@ -25,11 +25,11 @@ class MetricsGateSchemaTest {
     }
 
     @Test
-    void goldenFixtureHasEightClassifications() throws Exception {
+    void goldenFixtureHasEightTechniques() throws Exception {
         Path fixture = Path.of("src/test/resources/fixtures/platform_dependency_check_golden.json");
-        Path classifications = Path.of("src/test/resources/fixtures/classifications.json");
+        Path techniques = Path.of("src/test/resources/fixtures/classifications.json");
         JsonNode data = MAPPER.readTree(fixture.toFile());
-        JsonNode expected = MAPPER.readTree(classifications.toFile());
+        JsonNode expected = MAPPER.readTree(techniques.toFile());
 
         assertEquals(8, data.path("metrics").size());
         for (int i = 0; i < expected.size(); i++) {
