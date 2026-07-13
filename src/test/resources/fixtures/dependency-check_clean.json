@@ -1,17 +1,30 @@
 {
   "reportSchema": "1.1",
   "scanInfo": {
-    "engineVersion": "12.2.2"
+    "engineVersion": "12.2.2",
+    "dataSource": [
+      {
+        "name": "NVD API",
+        "timestamp": "2026-07-13T06:00:00Z"
+      },
+      {
+        "name": "OSS Index",
+        "timestamp": "2026-07-13T06:00:00Z"
+      }
+    ]
   },
   "projectInfo": {
     "name": "dependency-check-metrics-demo",
-    "reportDate": "2026-07-10T12:00:00Z"
+    "groupID": "com.testable",
+    "artifactID": "dependency-check-metrics-demo",
+    "version": "1.0.0-SNAPSHOT",
+    "reportDate": "2026-07-13T06:30:00Z"
   },
   "dependencies": [
     {
       "isVirtual": false,
       "fileName": "slf4j-api-2.0.13.jar",
-      "filePath": "/demo/slf4j-api-2.0.13.jar",
+      "filePath": "C:\\demo\\slf4j-api-2.0.13.jar",
       "license": "MIT",
       "projectReferences": ["compile"],
       "packages": [
@@ -37,7 +50,7 @@
     {
       "isVirtual": false,
       "fileName": "slf4j-simple-2.0.13.jar",
-      "filePath": "/demo/slf4j-simple-2.0.13.jar",
+      "filePath": "C:\\demo\\slf4j-simple-2.0.13.jar",
       "license": "MIT",
       "includedBy": [
         {
@@ -67,8 +80,96 @@
     },
     {
       "isVirtual": false,
+      "fileName": "jackson-databind-2.17.2.jar",
+      "filePath": "C:\\demo\\jackson-databind-2.17.2.jar",
+      "license": "Apache-2.0",
+      "projectReferences": ["compile"],
+      "packages": [
+        {
+          "id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind@2.17.2",
+          "confidence": "HIGHEST"
+        }
+      ],
+      "evidenceCollected": {
+        "vendorEvidence": [],
+        "productEvidence": [],
+        "versionEvidence": [
+          {
+            "type": "version",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "version",
+            "value": "2.17.2"
+          }
+        ]
+      }
+    },
+    {
+      "isVirtual": false,
+      "fileName": "jackson-core-2.17.2.jar",
+      "filePath": "C:\\demo\\jackson-core-2.17.2.jar",
+      "license": "Apache-2.0",
+      "includedBy": [
+        {
+          "reference": "pkg:maven/com.fasterxml.jackson.core/jackson-databind@2.17.2",
+          "type": "Transitive"
+        }
+      ],
+      "packages": [
+        {
+          "id": "pkg:maven/com.fasterxml.jackson.core/jackson-core@2.17.2",
+          "confidence": "HIGHEST"
+        }
+      ],
+      "evidenceCollected": {
+        "vendorEvidence": [],
+        "productEvidence": [],
+        "versionEvidence": [
+          {
+            "type": "version",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "version",
+            "value": "2.17.2"
+          }
+        ]
+      }
+    },
+    {
+      "isVirtual": false,
+      "fileName": "jackson-annotations-2.17.2.jar",
+      "filePath": "C:\\demo\\jackson-annotations-2.17.2.jar",
+      "license": "Apache-2.0",
+      "includedBy": [
+        {
+          "reference": "pkg:maven/com.fasterxml.jackson.core/jackson-databind@2.17.2",
+          "type": "Transitive"
+        }
+      ],
+      "packages": [
+        {
+          "id": "pkg:maven/com.fasterxml.jackson.core/jackson-annotations@2.17.2",
+          "confidence": "HIGHEST"
+        }
+      ],
+      "evidenceCollected": {
+        "vendorEvidence": [],
+        "productEvidence": [],
+        "versionEvidence": [
+          {
+            "type": "version",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "version",
+            "value": "2.17.2"
+          }
+        ]
+      }
+    },
+    {
+      "isVirtual": false,
       "fileName": "junit-jupiter-5.10.2.jar",
-      "filePath": "/demo/junit-jupiter-5.10.2.jar",
+      "filePath": "C:\\demo\\junit-jupiter-5.10.2.jar",
       "license": "EPL-2.0",
       "projectReferences": ["test"],
       "packages": [

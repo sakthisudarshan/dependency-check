@@ -63,7 +63,7 @@ class MetricsGateSchemaTest {
         Path clean = Path.of("src/test/resources/fixtures/dependency-check_clean.json");
         ScanReport report = MetricsReporter.computeMetrics(clean, null, null);
 
-        assertEquals(3, report.totalComponents());
+        assertEquals(6, report.totalComponents());
         assertEquals(0, report.totalVulnerabilities());
         assertEquals(0, report.distinctCves());
         for (MetricResult metric : report.metrics()) {
